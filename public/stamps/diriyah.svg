@@ -1,0 +1,15 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><clipPath id="c-diriyah"><rect x="8" y="8" width="104" height="104" rx="52"/></clipPath></defs>
+<circle cx="60" cy="60" r="60" fill="#FBF1DE"/>
+<g clip-path="url(#c-diriyah)">
+<rect x="8" y="8" width="104" height="104" fill="#7A4B2E"/>
+<g transform="translate(14 14) scale(0.92)">
+      <circle cx="78" cy="22" r="9" fill="#E2A33A"/>
+      <path d="M18 84 V44 H82 V84 Z" fill="#E9C99A"/>
+      <path d="M18 44 L24 36 L30 44 L36 36 L42 44 L48 36 L54 44 L60 36 L66 44 L72 36 L78 44 L82 40 V44 Z" fill="#E9C99A"/>
+      <path d="M28 54 L34 62 H22 Z M50 54 L56 62 H44 Z M72 54 L78 62 H66 Z" fill="#14163A"/>
+      <rect x="42" y="66" width="16" height="18" rx="8" fill="#14163A"/>
+      <path d="M18 84 H82" stroke="#A3232E" stroke-width="4"/></g>
+</g>
+<circle opacity="0.6" cx="60" cy="60" r="55.4" stroke="#14173B" stroke-width="1.2" stroke-dasharray="3 3"/>
+</svg>

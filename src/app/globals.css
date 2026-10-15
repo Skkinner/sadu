@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* Dark mode is class-driven (set by ThemeProvider) so the in-app toggle wins over the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+   Sadu design tokens (Figma › Design system › Foundations)
+   ------------------------------------------------------------------ */
+:root {
+  --bg-canvas: #ffffff;
+  --bg-subtle: #faf7f2;
+  --surface-card: #ffffff;
+  --surface-muted: #f4f0e8;
+  --border: #e9e2d6;
+  --border-strong: #8d8796;
+  --text-primary: #14163a;
+  --text-secondary: #4a4754;
+  --text-tertiary: #6e6a7a;
+  --action: #0b6b57;
+  --on-action: #ffffff;
+  --action-subtle: #e7f3ef;
+  --gold: #e2a33a;
+  --gold-subtle: #fbf1de;
+  --gold-text: #8a5a0b;
+  --error: #b42330;
+  --error-subtle: #fdecec;
+  --bg-inverse: #14163a;
+  --on-inverse: #f4efe6;
+  --brand-red: #a3232e;
+
+  /* illustration + logo tones */
+  --logo-ink: #14163a;
+  --ill-ink: #14163a;
+  --ill-green: #0b6b57;
+  --ill-green-2: #0e7a63;
+  --ill-red: #e0414b;
+  --ill-cream: #f4efe6;
+  --map-street: #ffffff;
+
+  --shadow-card: 0 1px 2px rgb(20 22 58 / 0.04), 0 2px 8px rgb(20 22 58 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(20 22 58 / 0.05), 0 12px 24px rgb(20 22 58 / 0.08);
+  --shadow-sheet: 0 4px 8px rgb(20 22 58 / 0.06), 0 24px 48px rgb(20 22 58 / 0.14);
+  --scrim: rgb(20 22 58 / 0.55);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg-canvas: #0f1130;
+  --bg-subtle: #14163a;
+  --surface-card: #1b1e45;
+  --surface-muted: #242852;
+  --border: #2f335f;
+  --border-strong: #6f7399;
+  --text-primary: #f4efe6;
+  --text-secondary: #c4c1d4;
+  --text-tertiary: #9c99b3;
+  --action: #4cc9a4;
+  --on-action: #0f1130;
+  --action-subtle: #133a3a;
+  --gold: #e8b04f;
+  --gold-subtle: #3a3122;
+  --gold-text: #f0c474;
+  --error: #ff8a8f;
+  --error-subtle: #3d1e2c;
+  --bg-inverse: #1b1e45;
+  --on-inverse: #f4efe6;
+  --brand-red: #e0414b;
+
+  --logo-ink: #f4efe6;
+  --ill-ink: #f4efe6;
+  --ill-green: #4cc9a4;
+  --ill-green-2: #0b6b57;
+  --ill-cream: #f4efe6;
+  --map-street: #0f1130;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.2), 0 2px 8px rgb(0 0 0 / 0.24);
+  --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.24), 0 12px 24px rgb(0 0 0 / 0.3);
+  --shadow-sheet: 0 4px 8px rgb(0 0 0 / 0.3), 0 24px 48px rgb(0 0 0 / 0.45);
+  --scrim: rgb(5 6 20 / 0.7);
+
+  color-scheme: dark;
+}
+
+/* Accessibility › Higher contrast */
+.contrast {
+  --border: var(--border-strong);
+  --text-secondary: var(--text-primary);
+  --text-tertiary: var(--text-primary);
+}
+
+@theme inline {
+  --color-canvas: var(--bg-canvas);
+  --color-subtle: var(--bg-subtle);
+  --color-card: var(--surface-card);
+  --color-muted: var(--surface-muted);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-tertiary);
+  --color-action: var(--action);
+  --color-on-action: var(--on-action);
+  --color-action-subtle: var(--action-subtle);
+  --color-gold: var(--gold);
+  --color-gold-subtle: var(--gold-subtle);
+  --color-gold-text: var(--gold-text);
+  --color-error: var(--error);
+  --color-error-subtle: var(--error-subtle);
+  --color-inverse: var(--bg-inverse);
+  --color-on-inverse: var(--on-inverse);
+  --color-brand-red: var(--brand-red);
+  --color-night: #14163a;
+  --color-saffron: #e2a33a;
+  --color-oasis: #0b6b57;
+  --color-sadu-red: #a3232e;
+  --color-cream: #f4efe6;
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-sheet: var(--shadow-sheet);
+
+  --font-display: var(--font-space-grotesk), var(--font-readex), system-ui, sans-serif;
+  --font-sans: var(--font-plex), var(--font-noto-arabic), system-ui, sans-serif;
+
+  --breakpoint-xs: 400px;
+}
+
+/* ------------------------------------------------------------------
+   Typography — EN: Space Grotesk + IBM Plex Sans
+                AR: Readex Pro + Noto Sans Arabic (1–2pt larger, taller leading)
+   Sizes are in rem so "Larger text" scales everything.
+   ------------------------------------------------------------------ */
+@utility t-display-xl {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1.107;
+  letter-spacing: -0.05rem;
+  &:lang(ar) { font-family: var(--font-readex), sans-serif; line-height: 1.3; letter-spacing: 0; }
+}
+@utility t-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.025rem;
+  &:lang(ar) { font-family: var(--font-readex), sans-serif; line-height: 1.35; letter-spacing: 0; }
+}
+@utility t-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.75rem;
+  line-height: 1.214;
+  letter-spacing: -0.00625rem;
+  &:lang(ar) { font-family: var(--font-readex), sans-serif; font-weight: 600; line-height: 1.393; letter-spacing: 0; }
+}
+@utility t-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1.273;
+  letter-spacing: -0.00625rem;
+  &:lang(ar) { font-family: var(--font-readex), sans-serif; font-weight: 600; line-height: 1.455; letter-spacing: 0; }
+}
+@utility t-h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.278;
+  &:lang(ar) { font-family: var(--font-readex), sans-serif; line-height: 1.5; }
+}
+@utility t-body-l {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.611;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; line-height: 1.778; }
+}
+@utility t-body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5625;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; line-height: 1.6875; }
+}
+@utility t-body-strong {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5625;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; line-height: 1.6875; }
+}
+@utility t-label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; line-height: 1.5; }
+}
+@utility t-caption {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; line-height: 1.5; }
+}
+@utility t-button {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.375;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; font-size: 1.0625rem; line-height: 1.412; }
+}
+@utility t-overline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.417;
+  letter-spacing: 0.0875rem;
+  text-transform: uppercase;
+  &:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; font-weight: 700; font-size: 0.8125rem; line-height: 1.54; letter-spacing: 0; }
+}
+
+/* Directional icons (arrows, chevrons) mirror in RTL */
+@utility flip-rtl {
+  &:where([dir="rtl"], [dir="rtl"] *) { transform: scaleX(-1); }
+}
+
+/* Container with the design's 20px mobile / 120px desktop gutters, max 1200 content */
+@utility page-container {
+  width: 100%;
+  max-width: calc(1200px + 2 * 1.25rem);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) { max-width: calc(1200px + 4rem); padding-inline: 2rem; }
+  @media (width >= 80rem) { max-width: 1200px; padding-inline: 0; box-sizing: content-box; }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  html[data-text-size="1"] { font-size: 87.5%; }
+  html[data-text-size="3"] { font-size: 112.5%; }
+  html[data-text-size="4"] { font-size: 125%; }
+
+  body {
+    background: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body:lang(ar) { font-family: var(--font-noto-arabic), sans-serif; }
+
+  :focus-visible {
+    outline: 2px solid var(--action);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
+}
+
+/* Accessibility › Reduce motion (also honours the OS setting) */
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes sadu-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sadu-pop-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes sadu-sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes sadu-spin { to { transform: rotate(360deg); } }
+@keyframes sadu-wave { 0%, 100% { transform: scaleY(0.6); } 50% { transform: scaleY(1); } }
+@keyframes sadu-stamp { 0% { opacity: 0; transform: scale(1.4) rotate(-8deg); } 60% { opacity: 1; transform: scale(0.95) rotate(2deg); } 100% { transform: scale(1) rotate(0); } }
+
+/* Hide scrollbars on horizontal card rails (mobile "Today at Expo") */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

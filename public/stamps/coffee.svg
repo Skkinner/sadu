@@ -1,0 +1,17 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><clipPath id="c-coffee"><rect x="8" y="8" width="104" height="104" rx="52"/></clipPath></defs>
+<circle cx="60" cy="60" r="60" fill="#FBF1DE"/>
+<g clip-path="url(#c-coffee)">
+<rect x="8" y="8" width="104" height="104" fill="#4A2E1C"/>
+<g transform="translate(14 14) scale(0.92)">
+      <path d="M44 22 L56 22 L50 12 Z" fill="#E2A33A"/>
+      <rect x="45" y="22" width="10" height="10" rx="2" fill="#E2A33A"/>
+      <path d="M36 80 L64 80 L60 46 Q50 30 40 46 Z" fill="#F4EFE6"/>
+      <path d="M59 48 Q74 44 80 26" stroke="#F4EFE6" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M41 50 Q26 56 38 72" stroke="#E2A33A" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M38 64 H62" stroke="#A3232E" stroke-width="4"/>
+      <path d="M68 74 H84 L81 86 H71 Z" fill="#E2A33A"/>
+      <path d="M72 70 Q70 64 74 60 M79 70 Q77 64 81 60" stroke="#F4EFE6" stroke-width="2.4" stroke-linecap="round" fill="none"/></g>
+</g>
+<circle opacity="0.6" cx="60" cy="60" r="55.4" stroke="#14173B" stroke-width="1.2" stroke-dasharray="3 3"/>
+</svg>

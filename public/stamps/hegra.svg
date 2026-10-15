@@ -1,0 +1,14 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><clipPath id="c-hegra"><rect x="8" y="8" width="104" height="104" rx="52"/></clipPath></defs>
+<circle cx="60" cy="60" r="60" fill="#FBF1DE"/>
+<g clip-path="url(#c-hegra)">
+<rect x="8" y="8" width="104" height="104" fill="#8E3F22"/>
+<g transform="translate(14 14) scale(0.92)">
+      <path d="M10 88 Q12 30 34 20 Q52 12 68 20 Q92 32 90 88 Z" fill="#E9C99A"/>
+      <path d="M30 40 H70 M34 34 H40 V40 M46 30 H54 V40 M60 34 H66 V40" stroke="#14163A" stroke-width="3.5" fill="none"/>
+      <rect x="32" y="42" width="36" height="40" fill="none" stroke="#14163A" stroke-width="3"/>
+      <rect x="42" y="58" width="16" height="24" fill="#14163A"/>
+      <path d="M38 52 H62" stroke="#A3232E" stroke-width="3"/></g>
+</g>
+<circle opacity="0.6" cx="60" cy="60" r="55.4" stroke="#14173B" stroke-width="1.2" stroke-dasharray="3 3"/>
+</svg>
