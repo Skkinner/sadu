@@ -16,14 +16,14 @@ export async function POST(request: Request) {
   const journeyId = typeof g.body.journeyId === "string" ? g.body.journeyId.slice(0, 64) : "";
   if (!journeyId) return bad("journeyId");
 
-  const input = buildSummaryInput(g.user.firstName, l, getUserData(g.user.id));
+  const input = buildSummaryInput(g.user.firstName, l, await getUserData(g.user.id));
   if (!input) return json({ error: "no_journey" }, 409);
   const refs = input.completed.flatMap((c) => referencesFor(c.id));
   let res: SummaryResponse;
   try {
     const { value, model } = await generateSummary(input);
     res = { origin: "ai", model, generatedAt: new Date().toISOString(), references: refs, lang: l, journeyId, data: value };
-    saveSummary(g.user.id, journeyId, l, value, model);
+    await saveSummary(g.user.id, journeyId, l, value, model);
   } catch (e) {
     res = { origin: "fallback", notice: e instanceof AiUnavailable ? e.reason : "api_error", references: refs, lang: l, journeyId, data: fallbackSummary(input) };
   }
