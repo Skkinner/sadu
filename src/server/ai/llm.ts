@@ -64,12 +64,12 @@ export async function generateStructured<S extends z.ZodType>(opts: {
       });
       const usage = { inputTokens: res.usage.input_tokens, outputTokens: res.usage.output_tokens };
       if (res.stop_reason === "refusal") {
-        logAiCall({ kind: opts.kind, provider: "anthropic", model: res.model, ok: false, ms: Date.now() - started, ...usage, error: "refusal" });
+        await logAiCall({ kind: opts.kind, provider: "anthropic", model: res.model, ok: false, ms: Date.now() - started, ...usage, error: "refusal" });
         throw new AiUnavailable("refused");
       }
       const value = res.parsed_output as z.infer<S> | null;
       const problem = res.stop_reason === "max_tokens" ? "the answer was cut off" : !value ? "the answer did not match the schema" : (opts.validate?.(value) ?? null);
-      logAiCall({ kind: opts.kind, provider: "anthropic", model: res.model, ok: !problem, ms: Date.now() - started, ...usage, error: problem ?? undefined });
+      await logAiCall({ kind: opts.kind, provider: "anthropic", model: res.model, ok: !problem, ms: Date.now() - started, ...usage, error: problem ?? undefined });
       if (!problem && value) return { value, model: res.model };
       lastProblem = problem ?? "invalid output";
     } catch (e) {
@@ -85,7 +85,7 @@ export async function generateStructured<S extends z.ZodType>(opts: {
               : e instanceof Anthropic.APIError
                 ? "api_error"
                 : null; // anything else: the response could not be parsed into the schema → retry
-      logAiCall({ kind: opts.kind, provider: "anthropic", model: LLM_MODEL, ok: false, ms, error: `${reason ?? "parse"}: ${(e as Error).message}` });
+      await logAiCall({ kind: opts.kind, provider: "anthropic", model: LLM_MODEL, ok: false, ms, error: `${reason ?? "parse"}: ${(e as Error).message}` });
       if (reason) throw new AiUnavailable(reason, (e as Error).message);
       lastProblem = "the answer was not valid JSON for the schema";
     }

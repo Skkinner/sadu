@@ -9,8 +9,8 @@ export async function GET() {
   const status: AiStatus = {
     llm: { configured: llmConfigured(), provider: "Anthropic Claude", model: LLM_MODEL },
     tts: { configured: ttsConfigured(), provider: "Azure AI Speech", voices: VOICES },
-    cache: aiCacheCounts(),
-    calls: recentAiCalls(15),
+    cache: await aiCacheCounts(),
+    calls: await recentAiCalls(15),
   };
   return json(status);
 }

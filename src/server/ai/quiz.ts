@@ -64,12 +64,12 @@ export function fallbackQuiz(id: PavilionId, depth: Depth, lang: Locale): Genera
 export async function getQuiz(id: PavilionId, depth: Depth, lang: Locale, opts: { allowGenerate?: boolean } = {}): Promise<QuizResponse> {
   const key = `${id}|${depth}|${lang}|${sourceHash(id)}|${PROMPT_VERSION}`;
   const base = { stationId: id, depth, lang, questionId: sha(key) };
-  const cached = getCached<GeneratedQuiz>("quiz", key);
+  const cached = await getCached<GeneratedQuiz>("quiz", key);
   if (cached) return { ...base, origin: "cache", model: cached.model, generatedAt: cached.createdAt, references: referencesFor(id, cached.value.refs), data: cached.value };
   try {
     if (opts.allowGenerate === false) throw new AiUnavailable("not_configured");
     const { value, model } = await once(`quiz:${key}`, () => generate(id, depth, lang, key));
-    putCached("quiz", key, lang, value, model);
+    await putCached("quiz", key, lang, value, model);
     return { ...base, origin: "ai", model, generatedAt: new Date().toISOString(), references: referencesFor(id, value.refs), data: value };
   } catch (e) {
     const notice = e instanceof AiUnavailable ? e.reason : "api_error";

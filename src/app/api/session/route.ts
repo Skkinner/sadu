@@ -6,7 +6,7 @@ import { currentUser, endSession, json, rateLimited, sameOrigin, startSession } 
 export async function GET() {
   const user = await currentUser();
   if (!user) return json({ user: null }); // nobody has entered yet: a normal state, not an error
-  return json({ user, data: getUserData(user.id) });
+  return json({ user, data: await getUserData(user.id) });
 }
 
 // POST { firstName, lastName, email } → find the account for this email (or create it) and start a session.
@@ -17,11 +17,11 @@ export async function POST(request: Request) {
   const result = validateProfile(body);
   if (!result.ok) return json({ error: "invalid", fields: result.errors }, 400);
 
-  const { user, created } = findOrCreateUser(result.value);
+  const { user, created } = await findOrCreateUser(result.value);
   await endSession(); // drop any previous visitor's session on this browser
   await startSession(user.id);
   // an existing account keeps its stored name: an unverified form must not rename someone else's account
-  return json({ user, created, data: created ? null : getUserData(user.id) }, created ? 201 : 200);
+  return json({ user, created, data: created ? null : await getUserData(user.id) }, created ? 201 : 200);
 }
 
 // DELETE → "Switch user": forget this browser's session. The account and its data stay in the database.

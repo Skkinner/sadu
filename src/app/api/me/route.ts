@@ -13,7 +13,7 @@ export async function PATCH(request: Request) {
   const result = validateProfile(body);
   if (!result.ok) return json({ error: "invalid", fields: result.errors }, 400);
   try {
-    return json({ user: updateUserProfile(user.id, result.value) });
+    return json({ user: await updateUserProfile(user.id, result.value) });
   } catch (e) {
     if (e instanceof EmailTakenError) return json({ error: "email_taken" }, 409);
     throw e;

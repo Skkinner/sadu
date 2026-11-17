@@ -69,7 +69,7 @@ export function fallbackContent(id: PavilionId, depth: Depth, lang: Locale): Sta
 export async function getStationContent(id: PavilionId, depth: Depth, lang: Locale, opts: { allowGenerate?: boolean } = {}): Promise<ContentResponse> {
   const key = contentKey(id, depth, lang);
   const base = { stationId: id, depth, lang };
-  const cached = getCached<StationContent>("content", key);
+  const cached = await getCached<StationContent>("content", key);
   if (cached) {
     const cited = cached.value.sections.flatMap((s) => s.refs);
     return { ...base, origin: "cache", model: cached.model, generatedAt: cached.createdAt, references: referencesFor(id, cited), data: cached.value };
@@ -77,7 +77,7 @@ export async function getStationContent(id: PavilionId, depth: Depth, lang: Loca
   try {
     if (opts.allowGenerate === false) throw new AiUnavailable("not_configured");
     const { value, model } = await once(`content:${key}`, () => generate(id, depth, lang));
-    putCached("content", key, lang, value, model);
+    await putCached("content", key, lang, value, model);
     const cited = value.sections.flatMap((s) => s.refs);
     return { ...base, origin: "ai", model, generatedAt: new Date().toISOString(), references: referencesFor(id, cited), data: value };
   } catch (e) {

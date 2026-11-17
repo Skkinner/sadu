@@ -28,12 +28,12 @@ export function fallbackBridge(from: PavilionId, to: PavilionId, lang: Locale) {
 export async function getBridge(from: PavilionId, to: PavilionId, lang: Locale, opts: { allowGenerate?: boolean } = {}): Promise<BridgeResponse> {
   const key = `${from}>${to}|${lang}|${sourceHash(from)}|${sourceHash(to)}|${PROMPT_VERSION}`;
   const base = { fromId: from, toId: to, lang, references: [] };
-  const cached = getCached<{ text: string }>("bridge", key);
+  const cached = await getCached<{ text: string }>("bridge", key);
   if (cached) return { ...base, origin: "cache", model: cached.model, generatedAt: cached.createdAt, data: cached.value };
   try {
     if (opts.allowGenerate === false) throw new AiUnavailable("not_configured");
     const { value, model } = await once(`bridge:${key}`, () => generate(from, to, lang));
-    putCached("bridge", key, lang, value, model);
+    await putCached("bridge", key, lang, value, model);
     return { ...base, origin: "ai", model, generatedAt: new Date().toISOString(), data: value };
   } catch (e) {
     return { ...base, origin: "fallback", notice: e instanceof AiUnavailable ? e.reason : "api_error", data: { text: fallbackBridge(from, to, lang) } };

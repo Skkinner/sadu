@@ -31,7 +31,7 @@ const escapeXml = (s: string) => s.replace(/[<>&'"]/g, (c) => ({ "<": "&lt;", ">
 export async function synthesize(text: string, lang: Locale, style: VoiceStyle) {
   const voice = VOICES[lang][style];
   const key = sha(`azure|${voice}|${text}`);
-  const cached = getAudio(key);
+  const cached = await getAudio(key);
   if (cached) return { audio: cached.audio, mime: cached.mime, voice, provider: "azure", cached: true };
   if (!ttsConfigured()) throw new TtsUnavailable("not_configured");
 
@@ -52,12 +52,12 @@ export async function synthesize(text: string, lang: Locale, style: VoiceStyle) 
     if (!res.ok) throw new Error(`Azure TTS ${res.status}`);
     const audio = new Uint8Array(await res.arrayBuffer());
     const mime = res.headers.get("content-type")?.split(";")[0] || "audio/mpeg";
-    logAiCall({ kind: "tts", provider: "azure", model: voice, ok: true, ms: Date.now() - started });
-    putAudio(key, "azure", voice, mime, audio);
+    await logAiCall({ kind: "tts", provider: "azure", model: voice, ok: true, ms: Date.now() - started });
+    await putAudio(key, "azure", voice, mime, audio);
     return { audio, mime, voice, provider: "azure", cached: false };
   } catch (e) {
     const timeout = (e as Error).name === "TimeoutError";
-    logAiCall({ kind: "tts", provider: "azure", model: voice, ok: false, ms: Date.now() - started, error: (e as Error).message });
+    await logAiCall({ kind: "tts", provider: "azure", model: voice, ok: false, ms: Date.now() - started, error: (e as Error).message });
     throw new TtsUnavailable(timeout ? "timeout" : "provider_error");
   }
 }

@@ -9,7 +9,7 @@ import { createSession, deleteSession, getSessionUser, type UserRow } from "./db
 // Anything private needs verified ownership first (passwordless email code or magic link).
 
 export async function startSession(userId: string) {
-  const { token, expires } = createSession(userId);
+  const { token, expires } = await createSession(userId);
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
@@ -22,13 +22,13 @@ export async function startSession(userId: string) {
 export async function endSession() {
   const store = await cookies();
   const token = store.get(SESSION_COOKIE)?.value;
-  if (token) deleteSession(token);
+  if (token) await deleteSession(token);
   store.delete(SESSION_COOKIE);
 }
 
 export async function currentUser(): Promise<UserRow | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
-  return token ? (getSessionUser(token) ?? null) : null;
+  return token ? ((await getSessionUser(token)) ?? null) : null;
 }
 
 /** Rejects cross-site writes (on top of SameSite=Lax) by requiring the Origin to match the Host. */

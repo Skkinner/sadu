@@ -6,9 +6,10 @@ A bilingual (Arabic RTL / English LTR), responsive website built from the Figma 
 Stack: Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · shadcn-style UI primitives on Radix.
 
 ```bash
-npm install                 # Node 24+ (uses the built-in node:sqlite)
+npm install                 # Node 24+
 cp .env.example .env.local  # add ANTHROPIC_API_KEY and AZURE_SPEECH_KEY / AZURE_SPEECH_REGION
-npm run dev                 # http://localhost:3000 → redirects to /ar
+netlify dev                 # http://localhost:8888 → redirects to /ar (next dev + a local Netlify Database)
+netlify database migrations apply   # first run and after adding a migration: creates the tables locally
 npm test                    # personalization engine tests (Node's test runner)
 npm run build && npm start
 npm run lint
@@ -16,6 +17,13 @@ npm run lint
 
 Without keys the app still runs end to end: generated content falls back to clearly labelled pre-written copy and
 narration switches to text-only reading. **Inside Sadu** (`/en/lab`) shows which integrations are configured.
+
+**Database**: Netlify Database (managed Postgres, `@netlify/database`). Netlify provisions it and applies the
+migrations in `netlify/database/migrations/` on deploy. Locally, use the Netlify CLI (`npm i -g netlify-cli`,
+`netlify login`, `netlify link`): `netlify dev` provides the connection and `netlify database migrations apply`
+creates the tables. To use another Postgres instead, set `SADU_DATABASE_URL` and apply the migration SQL to it
+yourself. Add schema changes as a new numbered migration (`netlify database migrations new`); never edit one that
+has been deployed.
 
 ## AI-powered journey (three layers)
 
@@ -75,8 +83,8 @@ Every screen labels content as **AI-generated**, **Algorithmic** or **Simulated*
   (Foundations › Colour roles), saved per visitor and applied before first paint.
 - **Users and data**: no passwords. Visitors enter first name, last name and email on `/start`; each email
   (trimmed, lower-cased) maps to exactly one account. Plan, journey progress, stamps, quiz scores, saved items and
-  preferences are stored per account in SQLite (`data/sadu.db`, Node's built-in `node:sqlite`, override with
-  `SADU_DB_PATH`) and synced by `src/lib/store.ts`. Progress saved in the browser by earlier versions is moved
+  preferences are stored per account in Postgres (Netlify Database, see above; `src/server/db.ts`) and synced
+  by `src/lib/store.ts`. Progress saved in the browser by earlier versions is moved
   into the account the first time the same email is entered. Pages other than the landing, entry, FAQ, contact,
   accessibility and privacy pages need a session (`src/proxy.ts` + `SessionGate`).
 - **Not authentication**: an email typed into the form identifies a visitor but does not prove they own it,
@@ -103,7 +111,8 @@ src/components/ui/          primitives (button, field, switch, dialog, list rows
 src/components/layout/      site nav, footer, app bar, tab bar, page shell
 src/components/brand/       generated from Figma SVG exports (icons, logos, illustrations, maps)
 src/data/pavilions.ts       mock pavilion content in both languages
-src/server/                 database (schema + migrations) and session helpers
+src/server/                 database queries and session helpers
+netlify/database/migrations/  Postgres schema (applied by Netlify on deploy)
 src/app/api/                session and user-data endpoints
 public/stamps, public/passport  country stamp artwork
 ```

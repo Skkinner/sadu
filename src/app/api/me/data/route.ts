@@ -11,6 +11,6 @@ export async function PUT(request: Request) {
   if (body?.userId !== user.id) return json({ error: "user_mismatch" }, 409);
   const data = sanitizeUserData(body?.data);
   if (!data) return json({ error: "invalid" }, 400);
-  saveUserData(user.id, data);
+  await saveUserData(user.id, data);
   return json({ ok: true });
 }
